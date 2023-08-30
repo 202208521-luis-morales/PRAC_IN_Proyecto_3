@@ -9,6 +9,7 @@ import config from "../init-config.json"
 function App() {
   // const [count, setCount] = useState(0)
   const MySwal = withReactContent(Swal);
+  const [messageTable, setMessageTable] = useState("Cargando...");
   const [usersData, setUsersData] = useState([]);
   const [userToAddData, setUserToAddData] = useState({
     name: "",
@@ -65,6 +66,7 @@ function App() {
     axios
       .get(config.endpointBack)
       .then((response) => {
+        setMessageTable("No hay usuarios aún")
         setUsersData(response.data);
       })
       .catch((error) => {
@@ -140,7 +142,7 @@ function App() {
         <h2>Tabla Usuarios</h2>
       </div>
       {usersData.length === 0 ? (
-        <div>Cargando...</div>
+        <div>{messageTable}</div>
       ) : (
         <div>
           <table className="table table-bordered">
