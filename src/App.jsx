@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import TableRow from "./components/TableRow";
+import config from "../init-config.json"
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -23,7 +24,7 @@ function App() {
       userToAddData.email != ""
     ) {
       axios
-        .post(`https://jsonplaceholder.typicode.com/users`, userToAddData)
+        .post(config.endpointBack, userToAddData)
         .then((response) => {
           console.log(response.data);
           setUserToAddData({
@@ -62,10 +63,9 @@ function App() {
 
   const hydrateUsersData = () => {
     axios
-      .get("https://jsonplaceholder.typicode.com/users")
+      .get(config.endpointBack)
       .then((response) => {
         setUsersData(response.data);
-        console.log(response);
       })
       .catch((error) => {
         console.error(error);

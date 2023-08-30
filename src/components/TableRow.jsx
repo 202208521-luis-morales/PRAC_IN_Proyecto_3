@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import config from "../../init-config.json";
 
 function TableRow({ user, hydrateUsersData }) {
   const [isEditEnabled, setIsEditEnabled] = useState(false);
@@ -21,10 +22,10 @@ function TableRow({ user, hydrateUsersData }) {
       userData.email != ""
     ) {
       axios
-        .put(`https://jsonplaceholder.typicode.com/users/${user.id}`, userData)
+        .put(`/${config.endpointBack}/${user.id}`, userData)
         .then((response) => {
           console.log(response.data);
-          setIsEditEnabled(false)
+          setIsEditEnabled(false);
           MySwal.fire(
             "Usuario modificado",
             "El usuario ha sido modificado con éxito",
@@ -36,12 +37,34 @@ function TableRow({ user, hydrateUsersData }) {
           console.error(error);
         });
     } else {
-      MySwal.fire(
-        "Error",
-        "No puede ir ningún espacio vacío",
-        "error"
-      );
+      MySwal.fire("Error", "No puede ir ningún espacio vacío", "error");
     }
+  };
+
+  const onDeleteButtonClicked = () => {
+    MySwal.fire({
+      title: "Eliminar usuario",
+      text: "¿Está seguro que quiere eliminar el usuario?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Borrar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${config.endpointBack}/+${user.id}`)
+          .then((response) => {
+            console.log(response.data);
+            Swal.fire("Borrado", "El usuario ha sido borrado con éxito", "success");
+            hydrateUsersData();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
   };
 
   const handleChange = (e) => {
@@ -129,7 +152,11 @@ function TableRow({ user, hydrateUsersData }) {
               >
                 Editar
               </button>
-              <button type="button" className="btn btn-danger">
+              <button
+                type="button"
+                onClick={onDeleteButtonClicked}
+                className="btn btn-danger"
+              >
                 Eliminar
               </button>
             </>
@@ -141,8 +168,8 @@ function TableRow({ user, hydrateUsersData }) {
 }
 
 TableRow.propTypes = {
-  user: PropTypes.string.isRequired,
-  hydrateUsersData: PropTypes.func.isRequired
+  user: PropTypes.object.isRequired,
+  hydrateUsersData: PropTypes.func.isRequired,
 };
 
 export default TableRow;
