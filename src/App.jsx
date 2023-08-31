@@ -13,7 +13,6 @@ function App() {
   const [usersData, setUsersData] = useState([]);
   const [userToAddData, setUserToAddData] = useState({
     name: "",
-    username: "",
     email: "",
   });
 
@@ -21,7 +20,6 @@ function App() {
     e.preventDefault();
     if (
       userToAddData.name != "" &&
-      userToAddData.username != "" &&
       userToAddData.email != ""
     ) {
       axios
@@ -30,7 +28,6 @@ function App() {
           console.log(response.data);
           setUserToAddData({
             name: "",
-            username: "",
             email: "",
           });
           hydrateUsersData();
@@ -101,20 +98,6 @@ function App() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="username">
-                  Usuario
-                </label>
-                <input
-                  autoComplete="off"
-                  className="form-control"
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={userToAddData.username}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-3">
                 <label className="form-label" htmlFor="email">
                   Email
                 </label>
@@ -142,7 +125,7 @@ function App() {
         <h2>Tabla Usuarios</h2>
       </div>
       {usersData.length === 0 ? (
-        <div>{messageTable}</div>
+        <div className="text-center">{messageTable}</div>
       ) : (
         <div>
           <table className="table table-bordered">
@@ -150,7 +133,6 @@ function App() {
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
                 <th scope="col">Email</th>
                 <th scope="col">Acciones</th>
               </tr>

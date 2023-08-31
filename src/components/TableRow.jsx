@@ -9,7 +9,6 @@ function TableRow({ user, hydrateUsersData }) {
   const [isEditEnabled, setIsEditEnabled] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
-    username: "",
     email: "",
   });
 
@@ -18,11 +17,10 @@ function TableRow({ user, hydrateUsersData }) {
   const onModifyButtonClicked = () => {
     if (
       userData.name != "" &&
-      userData.username != "" &&
       userData.email != ""
     ) {
       axios
-        .put(`/${config.endpointBack}/${user.id}`, userData)
+        .put(`${config.endpointBack}/${user.id}`, userData)
         .then((response) => {
           console.log(response.data);
           setIsEditEnabled(false);
@@ -78,10 +76,9 @@ function TableRow({ user, hydrateUsersData }) {
   useEffect(() => {
     setUserData({
       name: user.name,
-      username: user.username,
       email: user.email,
     });
-  }, [user.email, user.name, user.username]);
+  }, [user.email, user.name]);
 
   return (
     <tr key={user.id}>
@@ -100,15 +97,6 @@ function TableRow({ user, hydrateUsersData }) {
           <td>
             <input
               className="form-control"
-              name="username"
-              type="text"
-              onChange={handleChange}
-              value={userData.username}
-            />
-          </td>
-          <td>
-            <input
-              className="form-control"
               name="email"
               type="email"
               onChange={handleChange}
@@ -119,7 +107,6 @@ function TableRow({ user, hydrateUsersData }) {
       ) : (
         <>
           <td>{user.name}</td>
-          <td>{user.username}</td>
           <td>{user.email}</td>
         </>
       )}
